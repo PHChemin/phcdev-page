@@ -95,6 +95,8 @@ Peças que se repetem em landing com seções. O demo em `App.tsx` usa todas.
 | WhatsAppCta | `whatsapp-cta.tsx` | Link real para `wa.me` |
 | SectionHeading | `section-heading.tsx` | Eyebrow, título e frase |
 | Reveal | `reveal.tsx` | Entrada no scroll, sem blur |
+| Cursor | `cursor.tsx` | Bloco azul do logo (`_`), em `em`; pisca ou fica fixo como marcador |
+| LineGutter | `line-gutter.tsx` | Números de linha na margem (só ≥1360px); pai precisa ser `relative` |
 
 ## Handmade (`handmade/`)
 

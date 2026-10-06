@@ -22,20 +22,20 @@ export function SectionHeading({
   return (
     <div
       className={cn(
-        "max-w-2xl",
+        "max-w-5xl",
         align === "center" && "mx-auto text-center",
         className,
       )}
     >
       {eyebrow ? (
-        <p className="font-mono text-xs tracking-[0.22em] text-primary uppercase">
+        <p className="font-mono text-xs tracking-[0.22em] text-eyebrow uppercase">
           {eyebrow}
         </p>
       ) : null}
       <h2
         id={id}
         className={cn(
-          "font-display text-3xl font-semibold tracking-tight text-foreground md:text-4xl",
+          "font-display text-3xl font-semibold tracking-tight text-foreground md:text-5xl",
           eyebrow && "mt-3",
         )}
       >

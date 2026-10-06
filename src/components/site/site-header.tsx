@@ -67,86 +67,92 @@ export function SiteHeader({
   const hidden = useScrollHidden(hideOnScroll)
 
   return (
-    <header className="pointer-events-none fixed inset-x-0 top-0 z-40">
+    <header className="fixed inset-x-0 top-0 z-40">
       <div
         className={cn(
-          "mx-auto flex w-full max-w-5xl items-center justify-between gap-3 px-4 pt-4 transition-all duration-300 md:px-6 md:pt-5",
-          hidden
-            ? "pointer-events-none -translate-y-3 opacity-0"
-            : "pointer-events-auto translate-y-0 opacity-100",
+          "border-b border-border bg-background/85 backdrop-blur-md transition-transform duration-300",
+          hidden ? "-translate-y-full" : "translate-y-0",
         )}
       >
-        <a
-          href="#conteudo"
-          className="inline-flex h-11 min-w-0 items-center rounded-full border border-border bg-background/80 px-4 text-sm font-semibold text-foreground backdrop-blur-md"
-        >
-          {brand}
-        </a>
-
-        <nav
-          className="hidden h-11 items-center gap-1 rounded-full border border-border bg-background/80 px-1.5 backdrop-blur-md md:flex"
-          aria-label="Seções"
-        >
-          {links.map((item) => {
-            const isActive = active === item.id
-            return (
-              <a
-                key={item.href}
-                href={item.href}
-                aria-current={isActive ? "true" : undefined}
-                className={cn(
-                  "rounded-full px-3.5 py-2 text-sm transition-colors",
-                  isActive
-                    ? "bg-primary text-primary-foreground"
-                    : "text-muted-foreground hover:text-foreground",
-                )}
-              >
-                {item.label}
-              </a>
-            )
-          })}
-        </nav>
-
-        {cta ? <div className="hidden md:block">{cta}</div> : null}
-
-        <Sheet open={open} onOpenChange={setOpen}>
-          <SheetTrigger
-            className="inline-flex h-11 items-center gap-2 rounded-full border border-border bg-background/80 px-4 text-sm font-medium text-foreground backdrop-blur-md md:hidden"
-            aria-label="Abrir menu"
+        <div className="mx-auto flex h-16 w-full max-w-6xl items-center justify-between gap-4 px-5 md:px-8">
+          <a
+            href="#conteudo"
+            className="inline-flex h-11 min-w-0 items-center text-foreground"
           >
-            <Menu className="size-4" aria-hidden />
-            {menuLabel}
-          </SheetTrigger>
-          <SheetContent side="right" className="w-[min(100%,20rem)]">
-            <SheetHeader>
-              <SheetTitle>{menuLabel}</SheetTitle>
-              <SheetDescription>{menuDescription}</SheetDescription>
-            </SheetHeader>
-            <nav className="flex flex-col gap-1 px-3" aria-label="Seções">
-              {links.map((item) => (
-                <SheetClose asChild key={item.href}>
-                  <a
-                    href={item.href}
-                    aria-current={active === item.id ? "true" : undefined}
+            {brand}
+          </a>
+
+          <nav className="hidden items-center gap-7 md:flex" aria-label="Seções">
+            {links.map((item) => {
+              const isActive = active === item.id
+              return (
+                <a
+                  key={item.href}
+                  href={item.href}
+                  aria-current={isActive ? "true" : undefined}
+                  className={cn(
+                    "relative py-2 text-sm font-medium transition-colors",
+                    isActive
+                      ? "text-foreground"
+                      : "text-muted-foreground hover:text-foreground",
+                  )}
+                >
+                  {item.label}
+                  <span
+                    aria-hidden
                     className={cn(
-                      "rounded-lg px-3 py-3 text-base",
-                      active === item.id
-                        ? "bg-primary text-primary-foreground"
-                        : "text-foreground hover:bg-muted",
+                      "absolute -bottom-0.5 left-0 h-[3px] bg-primary transition-all duration-300",
+                      isActive ? "w-4" : "w-0",
                     )}
-                  >
-                    {item.label}
-                  </a>
-                </SheetClose>
-              ))}
-            </nav>
-            {cta ? (
-              <SheetFooter>
-                <SheetClose asChild>{cta}</SheetClose>
-              </SheetFooter>
-            ) : null}
-          </SheetContent>
-        </Sheet>
+                  />
+                </a>
+              )
+            })}
+          </nav>
+
+          <div className="flex items-center gap-3">
+            {cta ? <div className="hidden md:block">{cta}</div> : null}
+
+            <Sheet open={open} onOpenChange={setOpen}>
+              <SheetTrigger
+                className="inline-flex h-11 items-center gap-2 rounded-md border border-border px-3.5 text-sm font-medium text-foreground md:hidden"
+                aria-label="Abrir menu"
+              >
+                <Menu className="size-4" aria-hidden />
+                {menuLabel}
+              </SheetTrigger>
+              <SheetContent side="right" className="w-[min(100%,20rem)]">
+                <SheetHeader>
+                  <SheetTitle>{menuLabel}</SheetTitle>
+                  <SheetDescription>{menuDescription}</SheetDescription>
+                </SheetHeader>
+                <nav className="flex flex-col gap-1 px-3" aria-label="Seções">
+                  {links.map((item) => (
+                    <SheetClose asChild key={item.href}>
+                      <a
+                        href={item.href}
+                        aria-current={active === item.id ? "true" : undefined}
+                        className={cn(
+                          "flex min-h-12 items-center rounded-md px-3 text-base",
+                          active === item.id
+                            ? "bg-secondary text-foreground"
+                            : "text-foreground hover:bg-muted",
+                        )}
+                      >
+                        {item.label}
+                      </a>
+                    </SheetClose>
+                  ))}
+                </nav>
+                {cta ? (
+                  <SheetFooter>
+                    <SheetClose asChild>{cta}</SheetClose>
+                  </SheetFooter>
+                ) : null}
+              </SheetContent>
+            </Sheet>
+          </div>
+        </div>
       </div>
     </header>
   )

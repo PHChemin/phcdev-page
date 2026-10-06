@@ -4,21 +4,33 @@
 
 @custom-variant dark (&:is(.dark *));
 
-@theme {
-  --font-mono: "IBM Plex Mono", ui-monospace, monospace;
-  --font-display: "Syne", system-ui, sans-serif;
-  --font-sans: "DM Sans", system-ui, sans-serif;
+/* Fonte da Sonho de Papel, usada só no título do card dela. */
+@font-face {
+  font-family: "Aroma Vintage";
+  src: url("/fonts/aroma-vintage.otf") format("opentype");
+  font-display: swap;
+}
 
-  --color-ink: #12141a;
-  --color-ink-muted: #6b7280;
-  --color-paper: #f4f5f7;
-  --color-brand: #0f6b5c;
-  --color-brand-hover: #0c5649;
+@theme {
+  --font-mono: "Roboto Mono", ui-monospace, monospace;
+  --font-display: "Poppins", system-ui, sans-serif;
+  --font-letz: "Fraunces", Georgia, serif;
+  --font-sonho: "Aroma Vintage", "Poppins", sans-serif;
+  --font-casamento: "Great Vibes", cursive;
+  --font-sans: "Inter", system-ui, sans-serif;
+
+  --color-ink: #171717;
+  --color-ink-muted: #626772;
+  --color-paper: #e7e9ee;
+  --color-brand: #0f5afe;
+  --color-brand-hover: #0d4ed8;
+  --color-navy: #14306d;
   --color-surface: #ffffff;
 }
 
 @theme inline {
   --font-heading: var(--font-display);
+  --color-eyebrow: var(--eyebrow);
   --color-chart-5: var(--chart-5);
   --color-chart-4: var(--chart-4);
   --color-chart-3: var(--chart-3);
@@ -110,32 +122,62 @@
   }
 }
 
-/* Demo dark theme — replace tokens per client in docs/UI_GUIDANCE.md */
+/*
+ * Phc.Dev — dark por padrão (#171717), azul de marca (#0F5AFE) e navy (#14306D).
+ * `--eyebrow` é o azul para TEXTO pequeno (o azul puro não passa em contraste sobre grafite).
+ */
 :root {
-  --background: #12141a;
-  --foreground: #f4f5f7;
-  --card: #1a1d26;
-  --card-foreground: #f4f5f7;
-  --popover: #1a1d26;
-  --popover-foreground: #f4f5f7;
-  --primary: #0f6b5c;
+  --background: #171717;
+  --foreground: #f2f3f6;
+  --card: #1e2024;
+  --card-foreground: #f2f3f6;
+  --popover: #1e2024;
+  --popover-foreground: #f2f3f6;
+  --primary: #0f5afe;
   --primary-foreground: #ffffff;
-  --secondary: #24302c;
-  --secondary-foreground: #f4f5f7;
-  --muted: #22262f;
-  --muted-foreground: #9ca3af;
-  --accent: #24302c;
-  --accent-foreground: #f4f5f7;
+  --secondary: #14306d;
+  --secondary-foreground: #f2f3f6;
+  --muted: #202228;
+  --muted-foreground: #9aa0ac;
+  --accent: #14306d;
+  --accent-foreground: #f2f3f6;
   --destructive: oklch(0.704 0.191 22.216);
-  --border: rgb(244 245 247 / 14%);
-  --input: rgb(244 245 247 / 12%);
-  --ring: #0f6b5c;
-  --chart-1: #0f6b5c;
-  --chart-2: #24302c;
-  --chart-3: #9ca3af;
-  --chart-4: #f4f5f7;
+  --border: rgb(242 243 246 / 12%);
+  --input: rgb(242 243 246 / 12%);
+  --ring: #5e8eff;
+  --eyebrow: #6c9aff;
+  --chart-1: #0f5afe;
+  --chart-2: #14306d;
+  --chart-3: #626772;
+  --chart-4: #e7e9ee;
   --chart-5: #ffffff;
-  --radius: 0.625rem;
+  --radius: 0.5rem;
+}
+
+/* Seção clara: o "resultado polido" depois do código. Sobrescreve só as variáveis. */
+.theme-paper {
+  --background: #e7e9ee;
+  --foreground: #171717;
+  --card: #f4f5f8;
+  --card-foreground: #171717;
+  --muted: #dadde4;
+  --muted-foreground: #4b505b;
+  --border: rgb(23 23 23 / 14%);
+  --eyebrow: #0b47cc;
+  --ring: #0f5afe;
+  background-color: var(--background);
+  color: var(--foreground);
+}
+
+/* Faixa navy do contato. */
+.theme-navy {
+  --background: #14306d;
+  --card: #1a3a82;
+  --muted-foreground: #b8c5e6;
+  --border: rgb(231 233 238 / 20%);
+  --eyebrow: #a9c2ff;
+  background-color: var(--background);
+  color: var(--foreground);
 }
 
 @layer base {
@@ -156,6 +198,14 @@
   h3 {
     @apply font-display tracking-tight;
   }
+}
+
+/* Grade blueprint: 56px = duas linhas do gutter (28px). */
+.bg-grid {
+  background-image:
+    linear-gradient(to right, rgb(242 243 246 / 6%) 1px, transparent 1px),
+    linear-gradient(to bottom, rgb(242 243 246 / 6%) 1px, transparent 1px);
+  background-size: 56px 56px;
 }
 
 .reveal {
