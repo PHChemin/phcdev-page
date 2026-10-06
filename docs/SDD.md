@@ -1,26 +1,25 @@
-# Software Design Document
+# Software Design Document — Phc.Dev (One-page)
 
-Visão técnica do esqueleto **React Landpage Template** para landings freelance.
+Visão técnica do site principal Phc.Dev (vitrine do plano **One-page**).
 
 ## Stack
 
 | Camada | Escolha | Motivo |
 | --- | --- | --- |
-| UI | React 19 + TypeScript | Componentes animados e composição moderna |
-| Estilo | Tailwind CSS v4 + shadcn tokens | Utilitários + `@theme` |
-| Motion | Magic UI + Originkit + handmade | Banco local; Originkit pré-baixado |
-| Build | Vite | Dev rápido, `dist/` estático para Pages |
+| UI | React 19 + TypeScript | Seções, motion e composição moderna |
+| Estilo | Tailwind CSS v4 + shadcn tokens | Tokens `@theme`, identidade Phc.Dev |
+| Motion | Magic UI + Originkit + handmade | Banco local; Originkit pré-baixado no template |
+| Build | Vite 7 | Dev rápido, `dist/` estático para Pages |
 | Deploy | GitHub Pages + Actions | Hospedagem sem mensalidade |
-| Contato | Links externos (wa.me, mailto, redes) | Sem backend |
+| Contato | Links externos (wa.me, redes) | Sem backend |
 
 ## Arquitetura
 
 ```
-código-fonte (repo)
-  → npm run build (local ou GitHub Actions)
-  → pasta dist/ (HTML/CSS/JS/assets)
-  → artifact → GitHub Pages
-  → URL github.io ou domínio do cliente
+src/ (React + TS)
+  → npm run build
+  → dist/ (HTML/CSS/JS/assets)
+  → GitHub Actions → Pages
 ```
 
 ## Estrutura de pastas
@@ -28,34 +27,52 @@ código-fonte (repo)
 ```
 /
 ├── index.html
+├── components.json            # shadcn + @magicui
+├── originkit.components.json
+├── vite.config.ts
 ├── src/
 │   ├── main.tsx
-│   ├── App.tsx                 # landing demo (placeholders)
-│   ├── styles/main.css         # Tailwind + tokens
+│   ├── App.tsx                # One-page (hero + seções)
+│   ├── styles/main.css        # tokens Phc.Dev
 │   ├── lib/utils.ts
 │   └── components/
-│       ├── ui/                 # shadcn + Magic UI
-│       ├── originkit/          # bank Originkit
-│       └── handmade/           # componentes próprios
+│       ├── ui/                # shadcn + Magic UI
+│       ├── originkit/         # bank Originkit
+│       └── handmade/          # efeitos próprios
 ├── public/
+│   ├── logo-inline.png
+│   └── logo-icon.png
 ├── docs/
-├── components.json             # shadcn (+ registry @magicui)
-├── originkit.components.json
-├── .github/workflows/deploy.yml
-└── vite.config.ts
+└── .github/workflows/deploy.yml
 ```
+
+## Relação com o repo Presença
+
+| Repo | Papel |
+| --- | --- |
+| [PHChemin/phcdev](https://github.com/PHChemin/phcdev) | Amostra **Presença** (bio/Linktree) |
+| Este (`phcdev-page`) | Amostra **One-page** (seções, estilo Letz) |
+
+Mesma identidade (cores, logos, tom). Escopos de conteúdo diferentes — não duplicar o layout Presença aqui.
+
+## Originkit / Magic UI
+
+- Magic UI / shadcn: `npx shadcn@latest add @magicui/<nome>`
+- Originkit: `npx originkit login` → `npx originkit add <nome>`
+- Preferir componentes já versionados em `src/components/`
+- Skiper UI: **não adotado** por enquanto
 
 ## Regras de design técnico
 
 1. Site 100% estático após o build.
-2. Sem `node_modules` em produção — só o conteúdo de `dist/`.
-3. `base` do Vite: `./` por padrão (repo Pages e domínio custom).
-4. Originkit: versionar componentes no template; não commitar `.originkit/`.
-5. Magic UI / shadcn: starter no template; fetch sob demanda no projeto.
+2. `base: './'` no Vite — funciona em `*.github.io/repo` e domínio custom.
+3. Conteúdo One-page em `App.tsx` (ou seções extraídas): hero, serviços, sobre, contato (+ trabalhos se houver).
+4. Animações com intenção (2–3), sem poluir.
+5. Contato só via links — sem formulário server-side.
 
 ## Domínio
 
-Ver `DEPLOY.md`.
+Ver `DEPLOY.md`. URL principal da marca (não o subdomínio `linktree.`).
 
 ## Extensões futuras (opcional)
 

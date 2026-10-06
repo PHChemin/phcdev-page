@@ -1,32 +1,36 @@
 ---
-description: Stack e fluxo do React Landpage Template (GitHub Pages)
+description: Stack e fluxo do site Phc.Dev One-page (GitHub Pages)
 alwaysApply: true
 ---
 
-# React Landpage Template — regras do projeto
+# Phc.Dev — regras do projeto
 
-Esqueleto para landings freelance estáticas com React.
+Este repositório é o **site principal (One-page)** da marca Phc.Dev — amostra do plano One-page.
+
+O repo irmão [PHChemin/phcdev](https://github.com/PHChemin/phcdev) é a vitrine **Presença** (bio/Linktree). Não reduzir este site a Linktree.
 
 ## Stack (não trocar sem pedido explícito)
 
 - Vite + React + TypeScript + Tailwind CSS v4 (`@tailwindcss/vite`)
 - Deploy: GitHub Pages via `.github/workflows/deploy.yml`
-- Sem Next/backend neste template
+- Sem Next/backend neste projeto
 
-## Ao personalizar um cliente
+## Ao personalizar
 
-1. Ler `docs/CLIENT_BRIEF.md` e `docs/PRD.md` (preencher se vazios).
+1. Ler `docs/CLIENT_BRIEF.md` e `docs/PRD.md`.
 2. Seguir `docs/UI_GUIDANCE.md` e tokens em `src/styles/main.css`.
 3. Trocar placeholders em `src/App.tsx` e `index.html`.
 4. Contato só via links (`wa.me`, `mailto:`, redes) — Pages é estático.
-5. Preferir componentes já em `src/components/`; Originkit cresce no template bank.
+5. Preferir componentes já em `src/components/`.
 6. Deploy e domínio: `docs/DEPLOY.md`.
 
 ## Design
 
 - Hero full-bleed; marca forte no primeiro viewport.
+- One-page com seções (Serviços · Sobre · Contato · Trabalhos opcional).
+- Identidade Phc.Dev: dark `#171717`, brand `#0F5AFE`, navy `#14306D`; fontes Roboto Mono / Poppins / Inter.
 - Evitar layouts genéricos “dashboard”, cards no hero, chips flutuantes.
-- Evitar tipografia/cores clichê de IA (Inter, roxo genérico, cream+terracotta default).
+- Evitar clichês de IA (roxo genérico, cream+terracotta, glow excessivo).
 
 ## Build
 
