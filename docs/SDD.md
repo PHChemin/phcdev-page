@@ -34,15 +34,21 @@ src/ (React + TS)
 │   ├── main.tsx
 │   ├── App.tsx                # One-page (hero + seções)
 │   ├── styles/main.css        # tokens Phc.Dev
-│   ├── lib/utils.ts
+│   ├── lib/                   # utils, links, hooks
+│   ├── hooks/
 │   └── components/
-│       ├── ui/                # shadcn + Magic UI
+│       ├── ui/                # shadcn + Magic UI + Aceternity
+│       ├── animate-ui/        # Animate UI (components + primitives)
 │       ├── originkit/         # bank Originkit
+│       ├── site/              # peças de landing (header, CTA, seções)
 │       └── handmade/          # efeitos próprios
 ├── public/
 │   ├── logo-inline.png
 │   └── logo-icon.png
-├── docs/
+├── docs/                      # brief, PRD, direção de arte, referências
+├── .cursor/
+│   ├── rules/                 # regras do projeto
+│   └── skills/design-landing/ # fluxo de direção de arte
 └── .github/workflows/deploy.yml
 ```
 
@@ -55,9 +61,9 @@ src/ (React + TS)
 
 Mesma identidade (cores, logos, tom). Escopos de conteúdo diferentes — não duplicar o layout Presença aqui.
 
-## Originkit / Magic UI
+## Originkit / Magic UI / Animate UI
 
-- Magic UI / shadcn: `npx shadcn@latest add @magicui/<nome>`
+- Magic UI / shadcn / Aceternity / Animate UI: `npx shadcn@latest add @magicui/<nome>` (registries em `components.json`)
 - Originkit: `npx originkit login` → `npx originkit add <nome>`
 - Preferir componentes já versionados em `src/components/`
 - Skiper UI: **não adotado** por enquanto

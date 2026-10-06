@@ -31,6 +31,14 @@ Respostas consolidadas para personalizar o site. Este repo **é** a página prin
   - Ícone: `public/logo-icon.png`
 - **Imagens:** portfólio / trabalhos — _(a definir; placeholders ok no primeiro draft)_
 
+## Negócio
+
+- **Quem é o cliente:** pequenos negócios e profissionais que hoje só têm rede social, ou querem um site com oferta clara; também quem precisa de app mobile
+- **Faixa de preço:** _(a definir — ver proposta comercial)_
+- **O que faz diferente:** do briefing à publicação com uma pessoa só; código próprio, hospedagem sem mensalidade (GitHub Pages)
+- **Concorrentes de quem quer se distanciar:** _(a definir — hipótese: construtores no-code genéricos e agências com layout de template)_
+- **Como o cliente chega:** Instagram (@phc.dev), indicação, LinkedIn
+
 ## Frases
 
 - **Conceito central:** _Cada linha tem um propósito._
@@ -38,6 +46,13 @@ Respostas consolidadas para personalizar o site. Este repo **é** a página prin
 - **Frase de apoio (sugestão):** Desenvolvimento de software — presença digital, one-pages e apps mobile. Direto, técnico e sem jargão vazio.
 - **Quem é:** Pedro Henrique Chemin · Phc.Dev
 - **Tom:** Direto, técnico mas acessível — quem já resolveu o problema, não quem promete resolver.
+- **Expressões do ofício:** linha, commit, build, deploy, cursor — usar com moderação, sem jargão vazio.
+
+## Visual
+
+- **3 palavras que descrevem a marca:** _(a definir — hipótese: preciso, direto, limpo)_
+- **3 palavras que a marca não é:** _(a definir — hipótese: cartoon, genérico, exagerado)_
+- **Abertura a arriscar:** _(a definir — hipótese: meio-termo/ousado, já que é vitrine do próprio serviço)_
 
 ## Preferências
 

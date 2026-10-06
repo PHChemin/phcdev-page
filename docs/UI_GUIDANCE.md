@@ -3,14 +3,26 @@
 Diretrizes visuais para o site principal. Leia junto com `PRD.md`.
 
 > Estrutura de seções: inspirada em [Letz Studio](https://www.letzdesignstudio.com.br/).  
-> Identidade (cores/tipografia/logo): herdada do briefing Phc.Dev / repo [phcdev](https://github.com/PHChemin/phcdev).
+> Identidade (cores/tipografia/logo): herdada do briefing Phc.Dev / repo [phcdev](https://github.com/PHChemin/phcdev).  
+> Direção de arte: `docs/ART_DIRECTION.md`. Processo completo (do tema aos prints): skill `.cursor/skills/design-landing/`.
 
 ## Conceito
 
 **Cada linha tem um propósito.**  
 Estética de terminal/código com acabamento limpo e futurista — contraste entre “código bruto” e “resultado polido”. Não cartoon, não sticker.
 
-## Princípios (sempre)
+## Criatividade alinhada ao tema
+
+O site deve **só poder ser da Phc.Dev**. Criatividade aqui não é somar efeitos — é tirar a forma do próprio ofício.
+
+1. **Conceito antes de componente** — a ideia central vem do mundo do código (terminal, commit, diff, build, deploy). Cor, fonte, textura, movimento e microcopy saem dela.
+2. **Use um suporte do ofício como estrutura** — terminal, editor, changelog, `README`. Isso dá personalidade sem cair em cards genéricos.
+3. **Um momento assinatura** — uma coisa memorável por página, de preferência no primeiro viewport. Só uma.
+4. **Subverta um clichê do segmento** — o clichê de dev é “matrix verde / hacker de capuz / neon roxo”. Fazer outra coisa de propósito.
+5. **Personalize os efeitos** — cor, velocidade e densidade ajustadas ao conceito. Efeito com valores default denuncia template.
+6. **Microcopy com voz** — botões e títulos no tom da marca, não “Saiba mais” / “Nossos serviços”.
+
+## Princípios de composição (sempre)
 
 1. **Uma composição no primeiro viewport** — marca + 1 headline + 1 frase + 1 grupo de CTA + visual dominante. Sem dashboard.
 2. **Marca em primeiro plano** — logo Phc.Dev com cursor quadrado; reconhecível sem o nav.
@@ -113,12 +125,18 @@ Inspirada em Letz — adaptar ao tom Phc.Dev (mais técnico, menos “♥”):
 
 ## Kits de UI
 
-- Prefira componentes já em `src/components/` (Magic UI, Originkit, handmade).
+- Prefira componentes já em `src/components/` — escolha pela seção “Escolha por clima” do README da pasta (clima **Tech / dev / moderno**).
 - Não sobrecarregue a página com todo o bank — escolha 2–4 efeitos.
 - Contato = botões/links claros. Sem formulário server-side neste stack.
 
 ## Checklist antes de entregar
 
+Verificar com prints reais (390px e 1440px), não de cabeça.
+
+- [ ] Teste da marca coberta: sem nome/logo, dá para perceber que é um dev/estúdio de software
+- [ ] Teste da troca: trocando só os textos, **não** serviria para outro cliente
+- [ ] Momento assinatura presente e visível cedo
+- [ ] Nenhum efeito só porque existe no bank
 - [ ] Tokens de cor/fonte Phc.Dev em `main.css`
 - [ ] Logos reais no header/favicon
 - [ ] Hero sem cards/overlays soltos

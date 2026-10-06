@@ -1,4 +1,4 @@
-import React, { useEffect, useId, useRef, useState } from "react"
+import React, { useEffect, useId, useMemo, useRef, useState } from "react"
 import { motion } from "motion/react"
 
 import { cn } from "@/lib/utils"
@@ -52,7 +52,7 @@ interface DotPatternProps extends React.SVGProps<SVGSVGElement> {
  * />
  *
  * @notes
- * - The component is client-side only ("use client")
+ * - The pattern fills its container and can glow without one node per random restart.
  * - Automatically responds to container size changes
  * - When glow is enabled, dots will animate with random delays and durations
  * - Uses Motion for animations
@@ -75,36 +75,49 @@ export function DotPattern({
   const containerRef = useRef<SVGSVGElement>(null)
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 })
 
+  const [reducedMotion, setReducedMotion] = useState(false)
+
   useEffect(() => {
+    const element = containerRef.current
+    if (!element) return
+
     const updateDimensions = () => {
-      if (containerRef.current) {
-        const { width, height } = containerRef.current.getBoundingClientRect()
-        setDimensions({ width, height })
-      }
+      const { width: nextWidth, height: nextHeight } = element.getBoundingClientRect()
+      setDimensions({ width: nextWidth, height: nextHeight })
     }
 
     updateDimensions()
-    window.addEventListener("resize", updateDimensions)
-    return () => window.removeEventListener("resize", updateDimensions)
+    const observer = new ResizeObserver(updateDimensions)
+    observer.observe(element)
+
+    const motionQuery = window.matchMedia("(prefers-reduced-motion: reduce)")
+    const syncMotion = () => setReducedMotion(motionQuery.matches)
+    syncMotion()
+    motionQuery.addEventListener("change", syncMotion)
+
+    return () => {
+      observer.disconnect()
+      motionQuery.removeEventListener("change", syncMotion)
+    }
   }, [])
 
-  const dots = Array.from(
-    {
-      length:
-        Math.ceil(dimensions.width / width) *
-        Math.ceil(dimensions.height / height),
-    },
-    (_, i) => {
-      const col = i % Math.ceil(dimensions.width / width)
-      const row = Math.floor(i / Math.ceil(dimensions.width / width))
+  const dots = useMemo(() => {
+    if (dimensions.width === 0 || dimensions.height === 0) return []
+    const cols = Math.max(1, Math.ceil(dimensions.width / width))
+    const rows = Math.max(1, Math.ceil(dimensions.height / height))
+    return Array.from({ length: cols * rows }, (_, i) => {
+      const col = i % cols
+      const row = Math.floor(i / cols)
       return {
         x: col * width + cx + x,
         y: row * height + cy + y,
-        delay: Math.random() * 5,
-        duration: Math.random() * 3 + 2,
+        delay: (i % 10) * 0.35,
+        duration: 2.4 + (i % 5) * 0.35,
       }
-    }
-  )
+    })
+  }, [dimensions.width, dimensions.height, width, height, x, y, cx, cy])
+
+  const animateGlow = glow && !reducedMotion
 
   return (
     <svg
@@ -128,10 +141,10 @@ export function DotPattern({
           cx={dot.x}
           cy={dot.y}
           r={cr}
-          fill={glow ? `url(#${id}-gradient)` : "currentColor"}
-          initial={glow ? { opacity: 0.4, scale: 1 } : {}}
+          fill={animateGlow ? `url(#${id}-gradient)` : "currentColor"}
+          initial={animateGlow ? { opacity: 0.4, scale: 1 } : {}}
           animate={
-            glow
+            animateGlow
               ? {
                   opacity: [0.4, 1, 0.4],
                   scale: [1, 1.5, 1],
@@ -139,7 +152,7 @@ export function DotPattern({
               : {}
           }
           transition={
-            glow
+            animateGlow
               ? {
                   duration: dot.duration,
                   repeat: Infinity,

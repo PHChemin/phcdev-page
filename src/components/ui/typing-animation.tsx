@@ -16,6 +16,7 @@ import {
 } from "motion/react"
 
 import { cn } from "@/lib/utils"
+import { usePrefersReducedMotion } from "@/lib/use-prefers-reduced-motion"
 
 const motionElements = {
   article: motion.article,
@@ -43,6 +44,9 @@ type TypingAnimationMotionComponent = ComponentType<
 interface TypingAnimationProps extends Omit<MotionProps, "children"> {
   children?: string
   words?: string[]
+  /** Static text rendered before the typed segment. */
+  prefix?: string
+  prefixClassName?: string
   className?: string
   duration?: number
   typeSpeed?: number
@@ -60,6 +64,8 @@ interface TypingAnimationProps extends Omit<MotionProps, "children"> {
 export function TypingAnimation({
   children,
   words,
+  prefix,
+  prefixClassName,
   className,
   duration = 100,
   typeSpeed,
@@ -77,6 +83,7 @@ export function TypingAnimation({
   const MotionComponent = motionElements[
     Component
   ] as TypingAnimationMotionComponent
+  const reducedMotion = usePrefersReducedMotion()
 
   const [displayedText, setDisplayedText] = useState<string>("")
   const [currentWordIndex, setCurrentWordIndex] = useState(0)
@@ -90,17 +97,15 @@ export function TypingAnimation({
 
   const wordsToAnimate = useMemo(
     () => words ?? (children ? [children] : []),
-    [words, children]
+    [words, children],
   )
   const hasMultipleWords = wordsToAnimate.length > 1
-
   const typingSpeed = typeSpeed ?? duration
   const deletingSpeed = deleteSpeed ?? typingSpeed / 2
-
-  const shouldStart = startOnView ? isInView : true
+  const shouldStart = !reducedMotion && (startOnView ? isInView : true)
   const animationSourceKey = useMemo(
     () => (words ? words.join("\u0000") : (children ?? "")),
-    [words, children]
+    [words, children],
   )
 
   useEffect(() => {
@@ -111,67 +116,50 @@ export function TypingAnimation({
   }, [animationSourceKey])
 
   useEffect(() => {
-    let timeout: ReturnType<typeof setTimeout> | null = null
+    if (reducedMotion || !shouldStart || wordsToAnimate.length === 0) return
 
-    if (shouldStart && wordsToAnimate.length > 0) {
-      const timeoutDelay =
-        delay > 0 && displayedText === ""
-          ? delay
-          : phase === "typing"
-            ? typingSpeed
-            : phase === "deleting"
-              ? deletingSpeed
-              : pauseDelay
+    const timeoutDelay =
+      delay > 0 && displayedText === ""
+        ? delay
+        : phase === "typing"
+          ? typingSpeed
+          : phase === "deleting"
+            ? deletingSpeed
+            : pauseDelay
 
-      timeout = setTimeout(() => {
-        const currentWord = wordsToAnimate[currentWordIndex] || ""
-        const graphemes = Array.from(currentWord)
+    const timeout = window.setTimeout(() => {
+      const currentWord = wordsToAnimate[currentWordIndex] || ""
+      const graphemes = Array.from(currentWord)
 
-        switch (phase) {
-          case "typing":
-            if (currentCharIndex < graphemes.length) {
-              setDisplayedText(
-                graphemes.slice(0, currentCharIndex + 1).join("")
-              )
-              setCurrentCharIndex(currentCharIndex + 1)
-            } else {
-              if (hasMultipleWords || loop) {
-                const isLastWord =
-                  currentWordIndex === wordsToAnimate.length - 1
-                if (!isLastWord || loop) {
-                  setPhase("pause")
-                }
-              }
-            }
-            break
-
-          case "pause":
-            setPhase("deleting")
-            break
-
-          case "deleting":
-            if (currentCharIndex > 0) {
-              setDisplayedText(
-                graphemes.slice(0, currentCharIndex - 1).join("")
-              )
-              setCurrentCharIndex(currentCharIndex - 1)
-            } else {
-              const nextIndex = (currentWordIndex + 1) % wordsToAnimate.length
-              setCurrentWordIndex(nextIndex)
-              setPhase("typing")
-            }
-            break
-        }
-      }, timeoutDelay)
-    }
-
-    return () => {
-      if (timeout !== null) {
-        clearTimeout(timeout)
+      switch (phase) {
+        case "typing":
+          if (currentCharIndex < graphemes.length) {
+            setDisplayedText(graphemes.slice(0, currentCharIndex + 1).join(""))
+            setCurrentCharIndex(currentCharIndex + 1)
+          } else if (hasMultipleWords || loop) {
+            const isLastWord = currentWordIndex === wordsToAnimate.length - 1
+            if (!isLastWord || loop) setPhase("pause")
+          }
+          break
+        case "pause":
+          setPhase("deleting")
+          break
+        case "deleting":
+          if (currentCharIndex > 0) {
+            setDisplayedText(graphemes.slice(0, currentCharIndex - 1).join(""))
+            setCurrentCharIndex(currentCharIndex - 1)
+          } else {
+            setCurrentWordIndex((currentWordIndex + 1) % wordsToAnimate.length)
+            setPhase("typing")
+          }
+          break
       }
-    }
+    }, timeoutDelay)
+
+    return () => window.clearTimeout(timeout)
   }, [
     shouldStart,
+    reducedMotion,
     phase,
     currentCharIndex,
     currentWordIndex,
@@ -185,50 +173,42 @@ export function TypingAnimation({
     delay,
   ])
 
+  const settledText = reducedMotion ? (wordsToAnimate[0] ?? "") : displayedText
   const currentWordGraphemes = Array.from(
-    wordsToAnimate[currentWordIndex] || ""
+    wordsToAnimate[currentWordIndex] || "",
   )
   const isComplete =
-    !loop &&
-    currentWordIndex === wordsToAnimate.length - 1 &&
-    currentCharIndex >= currentWordGraphemes.length &&
-    phase !== "deleting"
+    reducedMotion ||
+    (!loop &&
+      currentWordIndex === wordsToAnimate.length - 1 &&
+      currentCharIndex >= currentWordGraphemes.length &&
+      phase !== "deleting")
 
   const shouldShowCursor =
     showCursor &&
     !isComplete &&
     (hasMultipleWords || loop || currentCharIndex < currentWordGraphemes.length)
 
-  const getCursorChar = () => {
-    switch (cursorStyle) {
-      case "block":
-        return "▌"
-      case "underscore":
-        return "_"
-      case "line":
-      default:
-        return "|"
-    }
-  }
+  const cursorChar =
+    cursorStyle === "block" ? "▌" : cursorStyle === "underscore" ? "_" : "|"
 
   return (
     <MotionComponent
       ref={elementRef}
       className={cn(
-        "leading-20 tracking-[-0.02em]",
+        "tracking-[-0.02em]",
         Component === "span" && "inline-block",
-        className
+        className,
       )}
       {...props}
     >
-      {displayedText}
-      {shouldShowCursor && (
-        <span
-          className={cn("inline-block", blinkCursor && "animate-blink-cursor")}
-        >
-          {getCursorChar()}
+      {prefix ? <span className={prefixClassName}>{prefix}</span> : null}
+      {settledText}
+      {shouldShowCursor ? (
+        <span className={cn("inline-block", blinkCursor && "animate-blink-cursor")}>
+          {cursorChar}
         </span>
-      )}
+      ) : null}
     </MotionComponent>
   )
 }

@@ -1,14 +1,13 @@
-"use client"
-
 import { useRef } from "react"
 import {
-  AnimatePresence,
   motion,
   useInView,
   type MotionProps,
   type UseInViewOptions,
   type Variants,
 } from "motion/react"
+
+import { usePrefersReducedMotion } from "@/lib/use-prefers-reduced-motion"
 
 type MarginType = UseInViewOptions["margin"]
 
@@ -44,6 +43,7 @@ export function BlurFade({
   blur = "6px",
   ...props
 }: BlurFadeProps) {
+  const reduced = usePrefersReducedMotion()
   const ref = useRef(null)
   const inViewResult = useInView(ref, { once: true, margin: inViewMargin })
   const isInView = !inView || inViewResult
@@ -71,24 +71,25 @@ export function BlurFade({
     hiddenFilter !== visibleFilter
 
   return (
-    <AnimatePresence>
-      <motion.div
+    <motion.div
         ref={ref}
-        initial="hidden"
-        animate={isInView ? "visible" : "hidden"}
-        exit="hidden"
+        initial={reduced ? "visible" : "hidden"}
+        animate={reduced || isInView ? "visible" : "hidden"}
         variants={combinedVariants}
-        transition={{
-          delay: 0.04 + delay,
-          duration,
-          ease: "easeOut",
-          ...(shouldTransitionFilter ? { filter: { duration } } : {}),
-        }}
+        transition={
+          reduced
+            ? { duration: 0 }
+            : {
+                delay: 0.04 + delay,
+                duration,
+                ease: "easeOut",
+                ...(shouldTransitionFilter ? { filter: { duration } } : {}),
+              }
+        }
         className={className}
         {...props}
       >
         {children}
       </motion.div>
-    </AnimatePresence>
   )
 }

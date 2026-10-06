@@ -17,20 +17,24 @@ O repo irmão [PHChemin/phcdev](https://github.com/PHChemin/phcdev) é a vitrine
 
 ## Ao personalizar
 
-1. Ler `docs/CLIENT_BRIEF.md` e `docs/PRD.md`.
-2. Seguir `docs/UI_GUIDANCE.md` e tokens em `src/styles/main.css`.
-3. Trocar placeholders em `src/App.tsx` e `index.html`.
-4. Contato só via links (`wa.me`, `mailto:`, redes) — Pages é estático.
-5. Preferir componentes já em `src/components/`.
-6. Deploy e domínio: `docs/DEPLOY.md`.
+1. Seguir a skill `.cursor/skills/design-landing/` — ela guia do tema aos prints.
+2. Ler `docs/CLIENT_BRIEF.md` e `docs/PRD.md`. Campos vazios são normais: inferir, registrar como hipótese e seguir.
+3. Escrever a direção de arte em `docs/ART_DIRECTION.md` **antes** de codar o visual.
+4. Seguir `docs/UI_GUIDANCE.md` e tokens em `src/styles/main.css`.
+5. Trocar placeholders em `src/App.tsx`, `src/lib/links.ts` e `index.html`.
+6. Contato só via links (`wa.me`, `mailto:`, redes) — Pages é estático.
+7. Preferir componentes já em `src/components/` (seção "Escolha por clima" do README).
+8. Deploy e domínio: `docs/DEPLOY.md`.
 
 ## Design
 
+- Criativo, mas nascido do tema: conceito tirado do ofício (código, terminal, cursor), não efeitos somados.
 - Hero full-bleed; marca forte no primeiro viewport.
 - One-page com seções (Serviços · Sobre · Contato · Trabalhos opcional).
 - Identidade Phc.Dev: dark `#171717`, brand `#0F5AFE`, navy `#14306D`; fontes Roboto Mono / Poppins / Inter.
 - Evitar layouts genéricos “dashboard”, cards no hero, chips flutuantes.
 - Evitar clichês de IA (roxo genérico, cream+terracotta, glow excessivo).
+- Não entregar visual sem prints reais em 390px e 1440px (navegador do Cursor + `npm run dev`).
 
 ## Build
 
