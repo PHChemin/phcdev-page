@@ -32,13 +32,18 @@ código-fonte (repo)
 │   ├── main.tsx
 │   ├── App.tsx                 # landing demo (placeholders)
 │   ├── styles/main.css         # Tailwind + tokens
-│   ├── lib/utils.ts
+│   ├── lib/                    # utils, links, hooks do demo
 │   └── components/
-│       ├── ui/                 # shadcn + Magic UI
+│       ├── ui/                 # shadcn + Magic UI + Aceternity
+│       ├── animate-ui/         # Animate UI (components + primitives)
 │       ├── originkit/          # bank Originkit
+│       ├── site/               # peças de landing (header, CTA, seções)
 │       └── handmade/           # componentes próprios
 ├── public/
-├── docs/
+├── docs/                       # brief, PRD, direção de arte, referências
+├── .cursor/
+│   ├── rules/                  # regras do projeto
+│   └── skills/design-landing/  # fluxo de direção de arte
 ├── components.json             # shadcn (+ registry @magicui)
 ├── originkit.components.json
 ├── .github/workflows/deploy.yml
