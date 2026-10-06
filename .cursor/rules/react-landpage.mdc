@@ -26,6 +26,14 @@ O repo irmão [PHChemin/phcdev](https://github.com/PHChemin/phcdev) é a vitrine
 7. Preferir componentes já em `src/components/` (seção "Escolha por clima" do README).
 8. Deploy e domínio: `docs/DEPLOY.md`.
 
+## Conteúdo e tom (regras do dono)
+
+- **Nunca citar tecnologias, ferramentas ou o modo como o site é construído** na página (GitHub Pages, React, Expo, HTTPS, "código próprio", hospedagem etc.). Não interessa ao cliente e abre brecha para questionamento.
+- **Tom explicativo, não de vendedor.** Mostrar o que é feito, para quem serve e os trabalhos — como o site da Letz Studio. Evitar promessas, adjetivos de venda e CTAs insistentes.
+- **Não mencionar que esta página é amostra de um plano.**
+- Serviços descrevem **onde se aplicam** (cenários do cliente), não listas de seções técnicas.
+- Trabalhos em cards com as cores do próprio site do cliente; prints em `public/previews/`.
+
 ## Design
 
 - Criativo, mas nascido do tema: conceito tirado do ofício (código, terminal, cursor), não efeitos somados.

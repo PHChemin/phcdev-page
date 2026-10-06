@@ -19,17 +19,18 @@ Documentação oficial: [Configuring a custom domain](https://docs.github.com/pt
 
 | Site | Repo | Domínio sugerido |
 | --- | --- | --- |
-| One-page (este) | `phcdev-page` | `www.phcdev.com.br` (a confirmar) |
-| Presença / bio | `phcdev` | `linktree.phcdev.com.br` |
+| One-page (este) | `phcdev-page` | `phcdev.com.br` (apex) + `www` redirecionando |
+| Presença / bio | `phcdev` | `linktree.phcdev.com.br` (já no ar) |
+| Casamento (demo) | `wedding-site-template` | `casamento.phcdev.com.br` (já no ar) |
 
 ### No GitHub
 
 1. **Settings → Pages → Custom domain**
-2. Digite o domínio (ex.: `www.phcdev.com.br`)
+2. Digite o domínio (ex.: `phcdev.com.br`)
 3. Salve e aguarde a checagem DNS
 4. Depois de ok, marque **Enforce HTTPS**
 
-### No DNS do domínio (registrador)
+### No DNS do domínio (Registro.br → DNS → Editar zona)
 
 **Opção A — só www (mais simples)**
 
