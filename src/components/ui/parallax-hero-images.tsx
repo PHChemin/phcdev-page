@@ -1,5 +1,4 @@
-"use client";
-import React, { useEffect, useMemo, memo } from "react";
+import { useEffect, useMemo, memo } from "react";
 import {
   motion,
   useMotionValue,
@@ -89,6 +88,8 @@ export const ParallaxHeroImages = ({
   }, [images, variant]);
 
   useEffect(() => {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return
+
     const handleMouseMove = (e: MouseEvent) => {
       const x = (e.clientX / window.innerWidth) * 2 - 1;
       const y = (e.clientY / window.innerHeight) * 2 - 1;
@@ -106,6 +107,7 @@ export const ParallaxHeroImages = ({
         "pointer-events-none absolute inset-0 overflow-hidden",
         className,
       )}
+      aria-hidden
     >
       {positions.map((pos, index) => (
         <ParallaxImage
@@ -114,6 +116,7 @@ export const ParallaxHeroImages = ({
           position={pos.position}
           depth={pos.depth}
           delay={pos.delay}
+          priority={index < 2}
           imageClassName={imageClassName}
           smoothMouseX={smoothMouseX}
           smoothMouseY={smoothMouseY}
@@ -125,6 +128,7 @@ export const ParallaxHeroImages = ({
 
 interface ParallaxImageProps extends ImagePosition {
   imageClassName?: string;
+  priority?: boolean;
   smoothMouseX: MotionValue<number>;
   smoothMouseY: MotionValue<number>;
 }
@@ -134,6 +138,7 @@ const ParallaxImage = memo(function ParallaxImage({
   position,
   depth,
   delay,
+  priority = false,
   imageClassName,
   smoothMouseX,
   smoothMouseY,
@@ -176,10 +181,11 @@ const ParallaxImage = memo(function ParallaxImage({
       <img
         src={src}
         alt=""
-        loading="lazy"
+        loading={priority ? "eager" : "lazy"}
+        fetchPriority={priority ? "high" : "auto"}
         decoding="async"
         className={cn(
-          "aspect-4/3 h-20 w-32 rounded-lg object-cover shadow-sm ring-1 ring-black/10 sm:h-40 sm:w-56 md:h-52 md:w-80 dark:ring-white/10",
+          "aspect-4/3 h-20 w-32 rounded-lg object-cover shadow-sm ring-1 ring-foreground/10 sm:h-40 sm:w-56 md:h-52 md:w-80",
           imageClassName,
         )}
       />

@@ -68,7 +68,7 @@ const Dock = React.forwardRef<HTMLDivElement, DockProps>(
     return (
       <motion.div
         ref={ref}
-        onMouseMove={(e) => mouseX.set(e.pageX)}
+        onMouseMove={(e) => mouseX.set(e.clientX)}
         onMouseLeave={() => mouseX.set(Infinity)}
         {...props}
         className={cn(dockVariants({ className }), {
@@ -138,10 +138,21 @@ const DockIcon = ({
       style={{ width: scaleSize, height: scaleSize, padding }}
       className={cn(
         "flex aspect-square cursor-pointer items-center justify-center rounded-full",
+        "focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/50",
         disableMagnification && "hover:bg-muted-foreground transition-colors",
         className
       )}
       {...props}
+      role={props.onClick ? "button" : props.role}
+      tabIndex={props.onClick ? 0 : props.tabIndex}
+      onKeyDown={(event) => {
+        props.onKeyDown?.(event)
+        if (!props.onClick) return
+        if (event.key === "Enter" || event.key === " ") {
+          event.preventDefault()
+          props.onClick(event as unknown as React.MouseEvent<HTMLDivElement>)
+        }
+      }}
     >
       <div>{children}</div>
     </motion.div>

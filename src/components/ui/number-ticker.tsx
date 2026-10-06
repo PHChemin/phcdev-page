@@ -1,5 +1,3 @@
-"use client"
-
 import { useEffect, useRef, type ComponentPropsWithoutRef } from "react"
 import { useInView, useMotionValue, useSpring } from "motion/react"
 
@@ -11,6 +9,7 @@ interface NumberTickerProps extends ComponentPropsWithoutRef<"span"> {
   direction?: "up" | "down"
   delay?: number
   decimalPlaces?: number
+  locale?: string
 }
 
 export function NumberTicker({
@@ -20,6 +19,7 @@ export function NumberTicker({
   delay = 0,
   className,
   decimalPlaces = 0,
+  locale = "pt-BR",
   ...props
 }: NumberTickerProps) {
   const ref = useRef<HTMLSpanElement>(null)
@@ -34,9 +34,10 @@ export function NumberTicker({
     let timer: ReturnType<typeof setTimeout> | null = null
 
     if (isInView) {
+      const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches
       timer = setTimeout(() => {
         motionValue.set(direction === "down" ? startValue : value)
-      }, delay * 1000)
+      }, reduced ? 0 : delay * 1000)
     }
 
     return () => {
@@ -50,20 +51,20 @@ export function NumberTicker({
     () =>
       springValue.on("change", (latest) => {
         if (ref.current) {
-          ref.current.textContent = Intl.NumberFormat("en-US", {
+          ref.current.textContent = Intl.NumberFormat(locale, {
             minimumFractionDigits: decimalPlaces,
             maximumFractionDigits: decimalPlaces,
           }).format(Number(latest.toFixed(decimalPlaces)))
         }
       }),
-    [springValue, decimalPlaces]
+    [springValue, decimalPlaces, locale]
   )
 
   return (
     <span
       ref={ref}
       className={cn(
-        "inline-block tracking-wider text-black tabular-nums dark:text-white",
+        "inline-block tracking-wider text-foreground tabular-nums",
         className
       )}
       {...props}

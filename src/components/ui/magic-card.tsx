@@ -1,6 +1,4 @@
-"use client"
-
-import React, { useCallback, useEffect, useRef, useState } from "react"
+import React, { useCallback, useEffect, useRef } from "react"
 import {
   motion,
   useMotionTemplate,
@@ -9,25 +7,7 @@ import {
 } from "motion/react"
 
 import { cn } from "@/lib/utils"
-
-function useIsDarkTheme() {
-  const [isDark, setIsDark] = useState(() => {
-    if (typeof document === "undefined") return true
-    return document.documentElement.classList.contains("dark")
-  })
-
-  useEffect(() => {
-    const root = document.documentElement
-    const sync = () => setIsDark(root.classList.contains("dark"))
-    sync()
-
-    const observer = new MutationObserver(sync)
-    observer.observe(root, { attributes: true, attributeFilter: ["class"] })
-    return () => observer.disconnect()
-  }, [])
-
-  return isDark
-}
+import { useDarkBackground } from "@/lib/theme"
 
 interface MagicCardBaseProps {
   children?: React.ReactNode
@@ -79,21 +59,36 @@ export function MagicCard(props: MagicCardProps) {
     gradientSize = 200,
     gradientColor = "#262626",
     gradientOpacity = 0.8,
-    gradientFrom = "#9E7AFF",
-    gradientTo = "#FE8BBB",
+    gradientFrom = "var(--primary)",
+    gradientTo = "var(--ring)",
     mode = "gradient",
   } = props
 
-  const glowFrom = isOrbMode(props) ? (props.glowFrom ?? "#ee4f27") : "#ee4f27"
-  const glowTo = isOrbMode(props) ? (props.glowTo ?? "#6b21ef") : "#6b21ef"
+  const glowFrom = isOrbMode(props) ? (props.glowFrom ?? "var(--primary)") : "var(--primary)"
+  const glowTo = isOrbMode(props) ? (props.glowTo ?? "var(--foreground)") : "var(--foreground)"
   const glowAngle = isOrbMode(props) ? (props.glowAngle ?? 90) : 90
   const glowSize = isOrbMode(props) ? (props.glowSize ?? 420) : 420
   const glowBlur = isOrbMode(props) ? (props.glowBlur ?? 60) : 60
   const glowOpacity = isOrbMode(props) ? (props.glowOpacity ?? 0.9) : 0.9
-  const isDarkTheme = useIsDarkTheme()
+  const isDarkTheme = useDarkBackground()
 
   const mouseX = useMotionValue(-gradientSize)
   const mouseY = useMotionValue(-gradientSize)
+
+  const borderBackground = useMotionTemplate`
+    linear-gradient(var(--color-background) 0 0) padding-box,
+    radial-gradient(${gradientSize}px circle at ${mouseX}px ${mouseY}px,
+      ${gradientFrom},
+      ${gradientTo},
+      var(--color-border) 100%
+    ) border-box
+  `
+  const spotlightBackground = useMotionTemplate`
+    radial-gradient(${gradientSize}px circle at ${mouseX}px ${mouseY}px,
+      ${gradientColor},
+      transparent 100%
+    )
+  `
 
   const orbX = useSpring(mouseX, { stiffness: 250, damping: 30, mass: 0.6 })
   const orbY = useSpring(mouseY, { stiffness: 250, damping: 30, mass: 0.6 })
@@ -174,31 +169,17 @@ export function MagicCard(props: MagicCardProps) {
       onPointerMove={handlePointerMove}
       onPointerLeave={() => reset("leave")}
       onPointerEnter={() => reset("enter")}
-      style={{
-        background: useMotionTemplate`
-          linear-gradient(var(--color-background) 0 0) padding-box,
-          radial-gradient(${gradientSize}px circle at ${mouseX}px ${mouseY}px,
-            ${gradientFrom},
-            ${gradientTo},
-            var(--color-border) 100%
-          ) border-box
-        `,
-      }}
+      style={{ background: borderBackground }}
     >
       <div className="bg-background absolute inset-px z-20 rounded-[inherit]" />
 
       {mode === "gradient" && (
         <motion.div
           suppressHydrationWarning
-          className="pointer-events-none absolute inset-px z-30 rounded-[inherit] opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+          className="pointer-events-none absolute inset-px z-30 rounded-[inherit] opacity-0 transition-opacity duration-300 group-hover:opacity-(--magic-opacity)"
           style={{
-            background: useMotionTemplate`
-              radial-gradient(${gradientSize}px circle at ${mouseX}px ${mouseY}px,
-                ${gradientColor},
-                transparent 100%
-              )
-            `,
-            opacity: gradientOpacity,
+            background: spotlightBackground,
+            ["--magic-opacity" as string]: gradientOpacity,
           }}
         />
       )}

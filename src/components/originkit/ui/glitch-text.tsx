@@ -1,5 +1,3 @@
-"use client";
-
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { CSSProperties } from "react";
 
@@ -89,7 +87,7 @@ export default function GlitchEffect({
   mode = "text",
   text = "GLITCH TEXT",
   font = {
-    fontFamily: "Inter",
+    fontFamily: "inherit",
     fontSize: 64,
     fontWeight: 700,
     letterSpacing: 0,
@@ -132,7 +130,7 @@ export default function GlitchEffect({
   const keyframes = useMemo(() => {
     if (!slice.enabled) return "";
     return buildSliceKeyframes(slice.minHeight, slice.maxHeight, true);
-  }, [slice.enabled, slice.minHeight, slice.maxHeight, animationName]);
+  }, [slice.enabled, slice.minHeight, slice.maxHeight]);
 
   const startGlitch = () => setIsPlaying(true);
   const stopGlitch = () => setIsPlaying(false);
@@ -186,13 +184,15 @@ export default function GlitchEffect({
     alignItems: "center",
   };
 
+  const iterationCount = infinite ? "infinite" : String(Math.max(1, repeat));
+
   const shakeStyle: CSSProperties =
     isPlaying && shake.enabled
       ? {
           animation: `${animationName}-shake ${Math.max(
             50,
             1000 / Math.max(1, shake.intensity)
-          )}ms linear infinite`,
+          )}ms linear ${iterationCount}`,
         }
       : {};
 
@@ -202,7 +202,7 @@ export default function GlitchEffect({
           animation: `${animationName}-slice ${Math.max(
             50,
             1000 / Math.max(1, slice.intensity)
-          )}ms steps(1) infinite`,
+          )}ms steps(1) ${iterationCount}`,
         }
       : {};
 
@@ -233,35 +233,10 @@ export default function GlitchEffect({
       </span>
     );
 
-  if (!haveContent) {
-    return (
-      <div style={{ width: "100%", height: "100%" }}>
-        <div
-          style={{
-            width: "100%",
-            height: "100%",
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            justifyContent: "center",
-            gap: 4,
-            color: "#888",
-            fontFamily: "sans-serif",
-            textAlign: "center",
-            padding: 16,
-          }}
-        >
-          <strong>Glitch Effect</strong>
-          <span style={{ fontSize: 13 }}>
-            Add an image to see the glitch effect.
-          </span>
-        </div>
-      </div>
-    );
-  }
+  if (!haveContent) return null;
 
   return (
-    <div ref={wrapperRef} id="glitch-effect-wrapper" style={mainStyle}>
+    <div ref={wrapperRef} style={mainStyle}>
       <style>{`
         @keyframes ${animationName}-shake {
           0% { transform: translate(0, 0); }
@@ -276,7 +251,6 @@ export default function GlitchEffect({
         }
       `}</style>
       <div
-        id="glitch-effect-content"
         ref={contentRef}
         style={{
           ...mainStyle,

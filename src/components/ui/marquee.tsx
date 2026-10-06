@@ -63,8 +63,10 @@ export function Marquee({
               "animate-marquee flex-row": !vertical,
               "animate-marquee-vertical flex-col": vertical,
               "group-hover:[animation-play-state:paused]": pauseOnHover,
-              "[animation-direction:reverse]": reverse,
+            "[animation-direction:reverse]": reverse,
+              "motion-reduce:animate-none": true,
             })}
+            aria-hidden={i > 0 ? true : undefined}
           >
             {children}
           </div>
