@@ -50,26 +50,9 @@ const brandStyles: Record<
   },
 }
 
-/** Enfeites que cada marca usa no próprio site. */
+/** Enfeites que cada marca usa no próprio site. A Letz não usa mais adesivos. */
 function BrandDecor({ brand }: { brand: Work["brand"] }) {
-  if (brand === "letz") {
-    return (
-      <>
-        <img
-          src={asset("works/letz-sticker.png")}
-          alt=""
-          aria-hidden
-          className="pointer-events-none absolute top-2 right-2 z-10 w-14 rotate-12 drop-shadow-md transition-transform duration-500 group-hover/work:rotate-[24deg] md:top-4 md:right-4 md:w-16"
-        />
-        <img
-          src={asset("works/letz-feito.png")}
-          alt=""
-          aria-hidden
-          className="pointer-events-none absolute bottom-1 left-2 z-10 w-24 -rotate-6 drop-shadow-md md:bottom-3 md:left-4 md:w-28"
-        />
-      </>
-    )
-  }
+  if (brand === "letz") return null
 
   if (brand === "sonho") {
     return (
